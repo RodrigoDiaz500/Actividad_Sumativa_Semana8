@@ -1,18 +1,22 @@
 package com.example.actividad_sumativa_semana8.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.actividad_sumativa_semana8.Model.Factura;
 import com.example.actividad_sumativa_semana8.Model.FacturaRequest;
 import com.example.actividad_sumativa_semana8.Model.Servicio;
 import com.example.actividad_sumativa_semana8.Service.FacturaService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/facturas") // Modificamos la ruta base
 public class FacturaController {
 
     @Autowired
@@ -20,26 +24,52 @@ public class FacturaController {
 
     // Servicios
     @PostMapping("/servicios")
-    public Servicio crearServicio(@RequestBody Servicio servicio) {
-        return facturaService.crearServicio(servicio);
+    public ResponseEntity<EntityModel<Servicio>> crearServicio(@RequestBody Servicio servicio) {
+        Servicio nuevoServicio = facturaService.crearServicio(servicio);
+        EntityModel<Servicio> servicioModel = EntityModel.of(nuevoServicio);
+        servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicio(nuevoServicio.getId())).withSelfRel());
+        servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicios()).withRel("servicios"));
+        return ResponseEntity.ok(servicioModel);
     }
 
     @GetMapping("/servicios")
-    public List<Servicio> obtenerServicios() {
-        return facturaService.obtenerServicios();
+    public ResponseEntity<List<EntityModel<Servicio>>> obtenerServicios() {
+        List<EntityModel<Servicio>> servicioModels = facturaService.obtenerServicios().stream()
+                .map(servicio -> {
+                    EntityModel<Servicio> model = EntityModel.of(servicio);
+                    model.add(linkTo(methodOn(FacturaController.class).obtenerServicio(servicio.getId())).withSelfRel());
+                    return model;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(servicioModels);
+    }
+
+    @GetMapping("/servicios/{id}")
+    public ResponseEntity<EntityModel<Servicio>> obtenerServicio(@PathVariable Long id) {
+        return facturaService.obtenerServicioPorId(id)
+                .map(servicio -> {
+                    EntityModel<Servicio> servicioModel = EntityModel.of(servicio);
+                    servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicio(id)).withSelfRel());
+                    servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicios()).withRel("servicios"));
+                    return ResponseEntity.ok(servicioModel);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/servicios/{id}")
-    public ResponseEntity<Servicio> actualizarServicio(@PathVariable Long id, @RequestBody Servicio servicioActualizado) {
+    public ResponseEntity<EntityModel<Servicio>> actualizarServicio(@PathVariable Long id, @RequestBody Servicio servicioActualizado) {
         return facturaService.obtenerServicioPorId(id)
-            .map(servicioExistente -> {
-                servicioExistente.setNombre(servicioActualizado.getNombre());
-                servicioExistente.setDescripcion(servicioActualizado.getDescripcion());
-                servicioExistente.setPrecio(servicioActualizado.getPrecio());
-                Servicio servicioGuardado = facturaService.crearServicio(servicioExistente);
-                return ResponseEntity.ok(servicioGuardado);
-            })
-            .orElse(ResponseEntity.notFound().build());
+                .map(servicioExistente -> {
+                    servicioExistente.setNombre(servicioActualizado.getNombre());
+                    servicioExistente.setDescripcion(servicioActualizado.getDescripcion());
+                    servicioExistente.setPrecio(servicioActualizado.getPrecio());
+                    Servicio servicioGuardado = facturaService.crearServicio(servicioExistente);
+                    EntityModel<Servicio> servicioModel = EntityModel.of(servicioGuardado);
+                    servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicio(id)).withSelfRel());
+                    servicioModel.add(linkTo(methodOn(FacturaController.class).obtenerServicios()).withRel("servicios"));
+                    return ResponseEntity.ok(servicioModel);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/servicios/{id}")
@@ -52,33 +82,53 @@ public class FacturaController {
     }
 
     // Facturas
-    @PostMapping("/facturas")
-    public Factura crearFactura(@RequestBody FacturaRequest facturaRequest) {
-        return facturaService.crearFactura(facturaRequest.getServicios()); // Usar el DTO para extraer los servicios
+    @PostMapping
+    public ResponseEntity<EntityModel<Factura>> crearFactura(@RequestBody FacturaRequest facturaRequest) {
+        Factura nuevaFactura = facturaService.crearFactura(facturaRequest.getServicios());
+        EntityModel<Factura> facturaModel = EntityModel.of(nuevaFactura);
+        facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFactura(nuevaFactura.getId())).withSelfRel());
+        facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFacturas()).withRel("facturas"));
+        return ResponseEntity.ok(facturaModel);
     }
 
-    @GetMapping("/facturas")
-    public List<Factura> obtenerFacturas() {
-        return facturaService.obtenerFacturas();
+    @GetMapping
+    public ResponseEntity<List<EntityModel<Factura>>> obtenerFacturas() {
+        List<EntityModel<Factura>> facturaModels = facturaService.obtenerFacturas().stream()
+                .map(factura -> {
+                    EntityModel<Factura> model = EntityModel.of(factura);
+                    model.add(linkTo(methodOn(FacturaController.class).obtenerFactura(factura.getId())).withSelfRel());
+                    return model;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(facturaModels);
     }
 
-    @GetMapping("/facturas/{id}")
-    public ResponseEntity<Factura> obtenerFactura(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Factura>> obtenerFactura(@PathVariable Long id) {
         return facturaService.obtenerFacturaPorId(id)
-                .map(ResponseEntity::ok)
+                .map(factura -> {
+                    EntityModel<Factura> facturaModel = EntityModel.of(factura);
+                    facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFactura(id)).withSelfRel());
+                    facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFacturas()).withRel("facturas"));
+                    return ResponseEntity.ok(facturaModel);
+                })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/facturas/{id}/pagar")
-    public ResponseEntity<Factura> pagarFactura(@PathVariable Long id) {
+    @PutMapping("/{id}/pagar")
+    public ResponseEntity<EntityModel<Factura>> pagarFactura(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(facturaService.pagarFactura(id));
+            Factura facturaPagada = facturaService.pagarFactura(id);
+            EntityModel<Factura> facturaModel = EntityModel.of(facturaPagada);
+            facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFactura(id)).withSelfRel());
+            facturaModel.add(linkTo(methodOn(FacturaController.class).obtenerFacturas()).withRel("facturas"));
+            return ResponseEntity.ok(facturaModel);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    @DeleteMapping("/facturas/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarFactura(@PathVariable Long id) {
         facturaService.eliminarFactura(id);
         return ResponseEntity.noContent().build();

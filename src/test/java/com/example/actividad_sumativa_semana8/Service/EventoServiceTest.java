@@ -101,21 +101,14 @@ public class EventoServiceTest {
     void inscribirParticipante_deberiaGuardarParticipanteYAsociarloAlEvento() {
         when(eventoRepository.findById(1L)).thenReturn(Optional.of(evento1));
         when(participanteRepository.save(any(Participante.class))).thenReturn(participante1);
-
         ArgumentCaptor<Participante> participanteCaptor = ArgumentCaptor.forClass(Participante.class);
-
-        EventoService eventoService = new EventoService(eventoRepository, participanteRepository); // Asegúrate de tener esta inicialización si @InjectMocks no funciona como esperas en tu entorno.
-
+        EventoService eventoService = new EventoService(eventoRepository, participanteRepository);
         Participante participanteInscrito = eventoService.inscribirParticipante(1L, new Participante());
-
         assertNotNull(participanteInscrito.getId());
         assertEquals(participante1.getNombre(), participanteInscrito.getNombre());
-
         verify(participanteRepository, times(1)).save(participanteCaptor.capture());
         Participante participanteGuardado = participanteCaptor.getValue();
-
         assertEquals(evento1, participanteGuardado.getEvento());
-
         verify(eventoRepository, times(1)).findById(1L);
     }
 }
