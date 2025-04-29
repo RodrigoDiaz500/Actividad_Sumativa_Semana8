@@ -1,15 +1,15 @@
-package com.example.actividad_sumativa_semana6.Controller;
+package com.example.actividad_sumativa_semana8.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.example.actividad_sumativa_semana8.Model.Factura;
+import com.example.actividad_sumativa_semana8.Model.FacturaRequest;
+import com.example.actividad_sumativa_semana8.Model.Servicio;
+import com.example.actividad_sumativa_semana8.Service.FacturaService;
 
-import com.example.actividad_sumativa_semana6.Service.FacturaService;
-import com.example.actividad_sumativa_semana6.Model.Factura;
-import com.example.actividad_sumativa_semana6.Model.FacturaRequest; // Importar el DTO
-import com.example.actividad_sumativa_semana6.Model.Servicio;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")

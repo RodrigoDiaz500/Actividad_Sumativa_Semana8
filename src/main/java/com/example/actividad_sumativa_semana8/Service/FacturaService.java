@@ -1,13 +1,14 @@
-package com.example.actividad_sumativa_semana6.Service;
+package com.example.actividad_sumativa_semana8.Service;
 
 import org.springframework.stereotype.Service;
-import com.example.actividad_sumativa_semana6.Repository.ServicioRepository;
 import org.springframework.transaction.annotation.Transactional;
-import com.example.actividad_sumativa_semana6.Repository.FacturaRepository;
+
+import com.example.actividad_sumativa_semana8.Model.*;
+import com.example.actividad_sumativa_semana8.Model.Factura.EstadoFactura;
+import com.example.actividad_sumativa_semana8.Repository.FacturaRepository;
+import com.example.actividad_sumativa_semana8.Repository.ServicioRepository;
 
 import jakarta.persistence.EntityNotFoundException;
-import com.example.actividad_sumativa_semana6.Model.*;
-import com.example.actividad_sumativa_semana6.Model.Factura.EstadoFactura;
 
 import java.util.Date;
 import java.util.List;

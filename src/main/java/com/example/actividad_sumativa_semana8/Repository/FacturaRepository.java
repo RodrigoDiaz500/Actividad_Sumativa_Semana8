@@ -1,7 +1,8 @@
-package com.example.actividad_sumativa_semana6.Repository;
+package com.example.actividad_sumativa_semana8.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.actividad_sumativa_semana6.Model.Factura;
+
+import com.example.actividad_sumativa_semana8.Model.Factura;
 
 public interface FacturaRepository extends JpaRepository<Factura, Long> {
 }

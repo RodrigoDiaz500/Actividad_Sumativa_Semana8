@@ -1,11 +1,12 @@
-package com.example.actividad_sumativa_semana6.Service;
+package com.example.actividad_sumativa_semana8.Service;
 
-import com.example.actividad_sumativa_semana6.Model.Evento;
-import com.example.actividad_sumativa_semana6.Model.Participante;
-import com.example.actividad_sumativa_semana6.Repository.EventoRepository;
-import com.example.actividad_sumativa_semana6.Repository.ParticipanteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import com.example.actividad_sumativa_semana8.Model.Evento;
+import com.example.actividad_sumativa_semana8.Model.Participante;
+import com.example.actividad_sumativa_semana8.Repository.EventoRepository;
+import com.example.actividad_sumativa_semana8.Repository.ParticipanteRepository;
 
 import java.util.List;
 

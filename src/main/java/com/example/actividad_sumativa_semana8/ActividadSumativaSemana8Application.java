@@ -1,13 +1,13 @@
-package com.example.actividad_sumativa_semana6;
+package com.example.actividad_sumativa_semana8;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ActividadSumativaSemana6Application {
+public class ActividadSumativaSemana8Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(ActividadSumativaSemana6Application.class, args);
+		SpringApplication.run(ActividadSumativaSemana8Application.class, args);
 	}
 
 }

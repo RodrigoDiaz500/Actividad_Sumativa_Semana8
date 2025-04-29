@@ -1,10 +1,11 @@
-package com.example.actividad_sumativa_semana6.Controller;
+package com.example.actividad_sumativa_semana8.Controller;
 
-import com.example.actividad_sumativa_semana6.Model.Evento;
-import com.example.actividad_sumativa_semana6.Model.Participante;
-import com.example.actividad_sumativa_semana6.Service.EventoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.example.actividad_sumativa_semana8.Model.Evento;
+import com.example.actividad_sumativa_semana8.Model.Participante;
+import com.example.actividad_sumativa_semana8.Service.EventoService;
 
 import java.util.List;
 

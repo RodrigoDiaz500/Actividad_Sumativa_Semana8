@@ -1,4 +1,4 @@
-package com.example.actividad_sumativa_semana6.Model;
+package com.example.actividad_sumativa_semana8.Model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
