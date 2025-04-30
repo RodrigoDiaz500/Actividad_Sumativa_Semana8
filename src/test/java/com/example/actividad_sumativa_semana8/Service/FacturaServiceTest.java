@@ -96,7 +96,7 @@ public class FacturaServiceTest {
         Factura facturaPagada = new Factura();
         facturaPagada.setId(facturaId);
         facturaPagada.setEstado(Factura.EstadoFactura.PAGADA);
-       when(facturaRepository.findById(facturaId)).thenReturn(Optional.of(facturaPendiente));
+        when(facturaRepository.findById(facturaId)).thenReturn(Optional.of(facturaPendiente));
         when(facturaRepository.save(any(Factura.class))).thenReturn(facturaPagada);
         Factura resultado = facturaService.pagarFactura(facturaId);
         assertEquals(Factura.EstadoFactura.PAGADA, resultado.getEstado());

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.actividad_sumativa_semana8.ActividadSumativaSemana8ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.42 s -- in com.example.actividad_sumativa_semana8.ActividadSumativaSemana8ApplicationTests
